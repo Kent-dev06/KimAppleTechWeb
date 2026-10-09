@@ -57,8 +57,8 @@ class RepairWorkflowTest extends TestCase
         $this->assertDatabaseHas('users',['user_id'=>$user->user_id,'name'=>'Casey Updated']);
         $this->assertDatabaseHas('customers',['customer_id'=>$customer->customer_id,'address'=>'New address']);
         $this->get('/repair')->assertOk()->assertSee('Casey Updated')->assertDontSee('other@example.test');
-        $this->patch('/repair/customers/'.$otherCustomer->customer_id,['name'=>'Tamper','first_name'=>'Other','last_name'=>'Customer'])->assertRedirect('/login');
-        $this->get('/repair/reports')->assertRedirect('/login');
+        $this->patch('/repair/customers/'.$otherCustomer->customer_id,['name'=>'Tamper','first_name'=>'Other','last_name'=>'Customer'])->assertForbidden();
+        $this->get('/repair/reports')->assertForbidden();
     }
 
     public function test_customer_device_is_saved_as_smartphone_and_request_starts_pending(): void
@@ -186,6 +186,76 @@ class RepairWorkflowTest extends TestCase
         $repair=RepairRecord::create(['appointment_id'=>$appointment->appointment_id,'device_id'=>$device->device_id,'diagnosis'=>'Battery service','repair_status'=>'Pending','cost_estimate'=>100]);
         $this->actingAs($staff)->get('/repair?repair_status=Pending')->assertOk()->assertSee('Battery service')->assertSee('<span>Customers</span><strong class="fs-3">1</strong>',false)->assertSee('<span>Pending requests</span><strong class="fs-3">1</strong>',false);
         $repair->update(['repair_status'=>'Completed','date_completed'=>now()->toDateString()]);
-        $this->get('/repair/reports?from='.now()->toDateString().'&to='.now()->toDateString())->assertOk()->assertSee('Completed repairs (1)')->assertSee('Battery service');
+        $this->get('/repair/reports?from='.now()->toDateString().'&to='.now()->toDateString())->assertOk()->assertSeeInOrder(['Completed repairs','1 records','Battery service']);
+    }
+
+    public function test_clerk_and_admin_dashboards_render_with_no_records(): void
+    {
+        foreach (['clerk', 'admin'] as $role) {
+            [$user] = $this->makeUser($role, $role.'-empty@example.test');
+
+            $this->assertTrue($user->is_active);
+            $this->actingAs($user)->get('/repair')->assertOk()
+                ->assertSee(ucfirst($role).' dashboard')
+                ->assertSee('No smartphones registered.')
+                ->assertSee('No appointments found.')
+                ->assertSee('<tr><td colspan="5" class="text-muted">No repair records yet.</td></tr>', false)
+                ->assertDontSee('@endif');
+            $this->get('/repair/reports')->assertOk();
+        }
+    }
+
+    public function test_staff_customer_edit_uses_form_fields_and_keeps_the_account_name_in_sync(): void
+    {
+        [, $customer] = $this->makeUser('customer', 'edit-customer@example.test');
+
+        foreach (['clerk', 'admin'] as $role) {
+            [$staff] = $this->makeUser($role, $role.'-edit@example.test');
+            $fields = ['first_name' => 'Casey', 'last_name' => ucfirst($role), 'contact_number' => '09179998888', 'address' => 'Updated address'];
+
+            $this->actingAs($staff)->from('/repair')->patch('/repair/customers/'.$customer->customer_id, $fields)
+                ->assertRedirect('/repair')->assertSessionHasNoErrors()->assertSessionHas('success');
+            $this->assertDatabaseHas('customers', ['customer_id' => $customer->customer_id] + $fields);
+            $this->assertDatabaseHas('users', ['user_id' => $customer->user_id, 'name' => 'Casey '.ucfirst($role)]);
+
+            $this->patch('/repair/customers/'.$customer->customer_id, $fields + ['name' => 'Forged name'])
+                ->assertSessionHasNoErrors();
+            $this->assertDatabaseHas('users', ['user_id' => $customer->user_id, 'name' => 'Casey '.ucfirst($role)]);
+        }
+    }
+
+    public function test_staff_can_select_a_customer_outside_the_dashboard_search_results_when_registering_a_smartphone(): void
+    {
+        [$staff] = $this->makeUser('clerk', 'selector-staff@example.test');
+        $this->makeUser('customer', 'visible-customer@example.test');
+        [, $otherCustomer] = $this->makeUser('customer', 'hidden-customer@example.test');
+        $otherCustomer->update(['first_name' => 'Zoe', 'last_name' => 'Unlisted']);
+
+        $this->actingAs($staff)->get('/repair?search=Casey')->assertOk()
+            ->assertSee('Zoe Unlisted · hidden-customer@example.test');
+    }
+
+    public function test_admin_accounts_and_analytics_render_with_repair_records(): void
+    {
+        [$admin] = $this->makeUser('admin', 'admin-pages@example.test');
+        [, $customer, $device] = $this->makeUser('customer', 'analytics-customer@example.test');
+        $appointment = $this->appointment($customer, $device, 'Completed');
+        RepairRecord::create(['appointment_id' => $appointment->appointment_id, 'device_id' => $device->device_id, 'diagnosis' => 'Analytics screen repair', 'repair_status' => 'Completed', 'cost_estimate' => 500, 'date_completed' => now()->toDateString()]);
+
+        $this->actingAs($admin)->get('/repair')->assertOk()->assertSee('Admin dashboard')->assertSee('Analytics screen repair');
+        $this->get('/repair/admin')->assertOk()->assertSee('Accounts &amp; activity', false)->assertSee('admin-pages@example.test');
+        $this->get('/repair/admin/reports')->assertOk()->assertSee('Analytics screen repair')->assertSee('PHP 500.00');
+    }
+
+    public function test_inactive_accounts_still_cannot_access_the_dashboard_or_log_in(): void
+    {
+        [$user] = $this->makeUser('clerk', 'inactive-clerk@example.test');
+        $user->update(['is_active' => false]);
+
+        $this->actingAs($user)->get('/repair')->assertRedirect('/login')
+            ->assertSessionHasErrors(['email' => 'This account has been deactivated.']);
+        $this->assertGuest();
+        $this->post('/login', ['email' => $user->email, 'password' => 'password'])->assertSessionHasErrors('email');
+        $this->assertGuest();
     }
 }
