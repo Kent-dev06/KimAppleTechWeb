@@ -10,7 +10,8 @@ Route::get('/register',fn()=>view('repair.register'));
 Route::view('/privacy-notice','repair.privacy-notice')->name('privacy-notice');
 Route::post('/register',[Repair::class,'register']);
 Route::post('/logout',[Repair::class,'logout'])->middleware('auth');
-Route::middleware(['auth','active'])->prefix('repair')->group(function(){
+Route::middleware(['auth','active','no-auth-cache'])->prefix('repair')->group(function(){
+ Route::get('/session-check',fn()=>response()->noContent())->name('repair.session-check');
  Route::get('/',[Repair::class,'dashboard'])->name('repair.home');
  Route::patch('/profile',[Repair::class,'profile']);
  Route::middleware('can:access-customer-tools')->group(function(){Route::post('/devices',[Repair::class,'device']);Route::post('/appointments',[Repair::class,'appointment']);});
