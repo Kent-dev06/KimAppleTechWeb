@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\{DB, Schema};
 return new class extends Migration {
     public function up(): void
     {
+        $isPostgres = DB::connection()->getDriverName() === 'pgsql';
+
+        if ($isPostgres) {
+            DB::statement('ALTER TABLE "users" DROP CONSTRAINT IF EXISTS "users_role_check"');
+        }
+
         Schema::table('users', function (Blueprint $table) {
             $table->string('role')->default('customer')->change();
             $table->boolean('is_active')->default(true);
@@ -14,9 +20,13 @@ return new class extends Migration {
 
         DB::table('users')->where('role', 'staff')->update(['role' => 'clerk']);
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['customer', 'clerk', 'admin'])->default('customer')->change();
-        });
+        if ($isPostgres) {
+            DB::statement('ALTER TABLE "users" ADD CONSTRAINT "users_role_check" CHECK ("role" IN (\'customer\', \'clerk\', \'admin\'))');
+        } else {
+            Schema::table('users', function (Blueprint $table) {
+                $table->enum('role', ['customer', 'clerk', 'admin'])->default('customer')->change();
+            });
+        }
 
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
@@ -30,7 +40,13 @@ return new class extends Migration {
 
     public function down(): void
     {
+        $isPostgres = DB::connection()->getDriverName() === 'pgsql';
+
         Schema::dropIfExists('activity_logs');
+
+        if ($isPostgres) {
+            DB::statement('ALTER TABLE "users" DROP CONSTRAINT IF EXISTS "users_role_check"');
+        }
 
         Schema::table('users', function (Blueprint $table) {
             $table->string('role')->default('customer')->change();
@@ -38,9 +54,16 @@ return new class extends Migration {
 
         DB::table('users')->whereIn('role', ['clerk', 'admin'])->update(['role' => 'staff']);
 
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) use ($isPostgres) {
             $table->dropColumn('is_active');
-            $table->enum('role', ['customer', 'staff'])->default('customer')->change();
+
+            if (!$isPostgres) {
+                $table->enum('role', ['customer', 'staff'])->default('customer')->change();
+            }
         });
+
+        if ($isPostgres) {
+            DB::statement('ALTER TABLE "users" ADD CONSTRAINT "users_role_check" CHECK ("role" IN (\'customer\', \'staff\'))');
+        }
     }
 };
