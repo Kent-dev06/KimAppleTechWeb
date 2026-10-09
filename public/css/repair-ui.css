@@ -1,0 +1,43 @@
+:root { --repair-ink:#14243b; --repair-blue:#2463eb; --repair-border:#e3eaf4; }
+body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-gradient(ellipse at 8% 0%,#eaf1ff 0,transparent 30%),#f4f7fb; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+.repair-app .navbar { min-height:68px; background:linear-gradient(105deg,#14243b,#20467c)!important; box-shadow:0 8px 24px #14243b26; }
+.repair-app .navbar .container { gap:1rem; }
+.repair-app .navbar-brand { font-weight:750; letter-spacing:-.02em; }
+.repair-app .navbar .btn-outline-light { border-color:#ffffff55; border-radius:10px; }
+.repair-app main.container { max-width:1240px; }
+.repair-app main>h1 { font-weight:760; letter-spacing:-.04em; margin:.5rem 0 1.25rem; }
+.repair-app .card { border:1px solid #dee7f3f2; border-radius:17px; box-shadow:0 8px 26px #1730530e; }
+.repair-app .card-body { padding:1.35rem; }
+.repair-app .card h2 { color:#1b2d48; font-weight:720; letter-spacing:-.025em; }
+.repair-app .row>[class*="col"]>.card .fs-3 { color:var(--repair-blue); letter-spacing:-.04em; }
+.repair-app .form-label { color:#394b65; font-size:.88rem; font-weight:650; }
+.repair-app .form-control,.repair-app .form-select { min-height:44px; color:var(--repair-ink); border-color:var(--repair-border); border-radius:10px; }
+.repair-app textarea.form-control { min-height:100px; }
+.repair-app .form-control:focus,.repair-app .form-select:focus { border-color:#8eb2ff; box-shadow:0 0 0 .22rem #2463eb1f; }
+.repair-app .btn { border-radius:10px; font-weight:650; transition:transform .16s ease,box-shadow .16s ease; }
+.repair-app .btn-primary { background:linear-gradient(100deg,#245fe0,#397bf1); border-color:transparent; box-shadow:0 6px 14px #2463eb29; }
+.repair-app .btn-primary:hover { background:linear-gradient(100deg,#1c51c7,#2d6cdd); transform:translateY(-1px); }
+.repair-app .alert { border:0; border-radius:12px; box-shadow:0 5px 16px #19304e10; }
+.repair-app .nav-tabs { gap:.35rem; border-color:var(--repair-border); }
+.repair-app .nav-tabs .nav-link { color:#60718a; border:0; border-radius:10px 10px 0 0; font-weight:650; padding:.8rem 1rem; }
+.repair-app .nav-tabs .nav-link:hover { color:var(--repair-blue); background:#eaf1ff88; }
+.repair-app .nav-tabs .nav-link.active { color:var(--repair-blue); background:white; box-shadow:inset 0 -3px var(--repair-blue); }
+.repair-app .tab-content { padding-top:.5rem; }
+.repair-app .table { --bs-table-bg:transparent; margin-bottom:0; }
+.repair-app .table thead th { padding-top:.8rem; padding-bottom:.8rem; color:#74839a; background:#f7f9fc; border-bottom-color:var(--repair-border); font-size:.74rem; font-weight:750; letter-spacing:.055em; text-transform:uppercase; white-space:nowrap; }
+.repair-app .table tbody td { padding-top:.9rem; padding-bottom:.9rem; border-color:#edf1f6; vertical-align:middle; }
+.repair-app .table tbody tr:last-child td { border-bottom:0; }
+.repair-app .badge { border-radius:999px; padding:.48em .75em; font-weight:700; }
+.repair-app .text-bg-warning { color:#664800!important; background:#fff1c2!important; }
+.repair-app .text-bg-info { color:#12566b!important; background:#d9f5fb!important; }
+.repair-login { min-height:100vh; display:grid; place-items:center; padding:2rem 1rem; }
+.repair-login-card { width:min(100%,1000px); overflow:hidden; border:1px solid #e0e8f3; border-radius:24px; background:white; box-shadow:0 26px 80px #14284824; }
+.repair-login-brand { min-height:100%; padding:clamp(2rem,5vw,3.5rem); color:white; background:radial-gradient(circle at 90% 10%,#4e83d466,transparent 32%),linear-gradient(145deg,#14243b,#204a82); }
+.repair-login-mark { display:grid; width:52px; height:52px; place-items:center; border-radius:16px; color:#14243b; background:linear-gradient(135deg,#9ee8ef,#72adff); }
+.repair-login-form { padding:clamp(2rem,5vw,3.5rem); }
+.repair-login-form h1 { font-weight:760; letter-spacing:-.04em; }
+.repair-login .form-control,.repair-login .btn-primary { min-height:48px; border-radius:11px; }
+.repair-login .btn-primary { font-weight:700; }
+.repair-empty-icon { display:grid; width:52px; height:52px; margin:0 auto .75rem; place-items:center; color:#4274ce; background:#edf3ff; border-radius:17px; font-size:1.45rem; }
+@media(max-width:575.98px) { .repair-app main.container { padding-left:1rem; padding-right:1rem; } .repair-app .card-body { padding:1.05rem; } .repair-app .nav-tabs { flex-wrap:nowrap; overflow-x:auto; } .repair-app .nav-tabs .nav-link { white-space:nowrap; padding:.68rem .8rem; font-size:.88rem; } .repair-app .navbar-brand { font-size:.95rem; } }
+@media(prefers-reduced-motion:reduce) { .repair-app *,.repair-login * { scroll-behavior:auto!important; transition:none!important; } }
