@@ -18,6 +18,6 @@
         @forelse($completedRepairs as $repair)<tr><td>{{ $repair->date_completed?->format('M d, Y') ?? '—' }}</td><td>{{ $repair->appointment?->customer?->first_name }} {{ $repair->appointment?->customer?->last_name }}</td><td>{{ $repair->device->brand }} {{ $repair->device->model }}</td><td>{{ $repair->diagnosis }}</td><td>PHP {{ number_format($repair->cost_estimate,2) }}</td><td><x-status-badge :status="$repair->repair_status" /></td></tr>@empty<tr><td colspan="6" class="text-center text-secondary py-4">No completed repairs in this date range.</td></tr>@endforelse
     </tbody></table></div></section>
 </main>
-<script>window.addEventListener('pageshow', event => { if (event.persisted) window.location.reload(); });</script>
+<script>window.addEventListener('pageshow', event => { if (event.persisted) fetch('/repair/session-check', { headers: { Accept: 'application/json' }, cache: 'no-store' }).then(response => { if (!response.ok) window.location.replace('/login'); }).catch(() => window.location.replace('/login')); });</script>
 </body>
 </html>
