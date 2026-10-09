@@ -173,6 +173,8 @@ class RepairWorkflowTest extends TestCase
         $this->actingAs($staff);
         $this->patch('/repair/appointments/'.$appointment->appointment_id,['status'=>'Cancelled'])->assertSessionHasNoErrors();
         $this->assertDatabaseHas('appointments',['appointment_id'=>$appointment->appointment_id,'status'=>'Cancelled']);
+        $this->patch('/repair/appointments/'.$appointment->appointment_id,['status'=>'Completed'])->assertSessionHasErrors(['status'=>'This appointment cannot be completed before its scheduled date.']);
+        $appointment->update(['confirmed_date'=>now()->toDateString()]);
         $this->patch('/repair/appointments/'.$appointment->appointment_id,['status'=>'Completed'])->assertSessionHasNoErrors();
         $this->assertDatabaseHas('appointments',['appointment_id'=>$appointment->appointment_id,'status'=>'Completed']);
     }
@@ -186,7 +188,7 @@ class RepairWorkflowTest extends TestCase
         $repair=RepairRecord::create(['appointment_id'=>$appointment->appointment_id,'device_id'=>$device->device_id,'diagnosis'=>'Battery service','repair_status'=>'Pending','cost_estimate'=>100]);
         $this->actingAs($staff)->get('/repair?repair_status=Pending')->assertOk()->assertSee('Battery service')->assertSee('<span>Customers</span><strong class="fs-3">1</strong>',false)->assertSee('<span>Pending requests</span><strong class="fs-3">1</strong>',false);
         $repair->update(['repair_status'=>'Completed','date_completed'=>now()->toDateString()]);
-        $this->get('/repair/reports?from='.now()->toDateString().'&to='.now()->toDateString())->assertOk()->assertSeeInOrder(['Completed repairs','1 records','Battery service']);
+        $this->get('/repair/reports?from='.now()->toDateString().'&to='.now()->toDateString())->assertOk()->assertSeeInOrder(['Completed repairs','1 record','Battery service'])->assertSee('Confirmed schedule');
     }
 
     public function test_clerk_and_admin_dashboards_render_with_no_records(): void
@@ -199,7 +201,7 @@ class RepairWorkflowTest extends TestCase
                 ->assertSee(ucfirst($role).' dashboard')
                 ->assertSee('No smartphones registered.')
                 ->assertSee('No appointments found.')
-                ->assertSee('<tr><td colspan="5" class="text-muted">No repair records yet.</td></tr>', false)
+                ->assertSee('No repair records yet.')
                 ->assertDontSee('@endif');
             $this->get('/repair/reports')->assertOk();
         }
@@ -244,7 +246,7 @@ class RepairWorkflowTest extends TestCase
 
         $this->actingAs($admin)->get('/repair')->assertOk()->assertSee('Admin dashboard')->assertSee('Analytics screen repair');
         $this->get('/repair/admin')->assertOk()->assertSee('Accounts &amp; activity', false)->assertSee('admin-pages@example.test');
-        $this->get('/repair/admin/reports')->assertOk()->assertSee('Analytics screen repair')->assertSee('PHP 500.00');
+        $this->get('/repair/admin/reports')->assertOk()->assertSee('Appointment status breakdown')->assertSee('PHP 500.00')->assertDontSee('Analytics screen repair');
     }
 
     public function test_inactive_accounts_still_cannot_access_the_dashboard_or_log_in(): void
@@ -257,5 +259,56 @@ class RepairWorkflowTest extends TestCase
         $this->assertGuest();
         $this->post('/login', ['email' => $user->email, 'password' => 'password'])->assertSessionHasErrors('email');
         $this->assertGuest();
+    }
+
+    public function test_appointment_booking_enforces_shop_hours_duration_and_date(): void
+    {
+        [, $customer, $device] = $this->makeUser('customer', 'time-rules@example.test');
+        $this->actingAs($customer->user);
+        $base = ['device_id' => $device->device_id, 'preferred_date' => today()->toDateString(), 'concern' => 'Screen repair'];
+
+        $this->from('/repair')->post('/repair/appointments', $base + ['preferred_start_time' => '07:30', 'preferred_end_time' => '08:00'])
+            ->assertSessionHasErrors('preferred_start_time');
+        $this->from('/repair')->post('/repair/appointments', $base + ['preferred_start_time' => '09:00', 'preferred_end_time' => '11:30'])
+            ->assertSessionHasErrors('preferred_end_time');
+        $this->from('/repair')->post('/repair/appointments', $base + ['preferred_start_time' => '09:00', 'preferred_end_time' => '09:00'])
+            ->assertSessionHasErrors('preferred_end_time');
+        $this->from('/repair')->post('/repair/appointments', array_merge($base, ['preferred_date' => now()->subDay()->toDateString(), 'preferred_start_time' => '09:00', 'preferred_end_time' => '10:00']))
+            ->assertSessionHasErrors('preferred_date');
+        $this->post('/repair/appointments', $base + ['preferred_start_time' => '08:00', 'preferred_end_time' => '08:30'])
+            ->assertSessionHasNoErrors();
+        $this->assertDatabaseCount('appointments', 1);
+    }
+
+    public function test_staff_cannot_complete_future_appointment_and_view_offers_one_repair_record(): void
+    {
+        [$staff] = $this->makeUser('clerk', 'future-guard@example.test');
+        [, $customer, $device] = $this->makeUser('customer', 'future-customer@example.test');
+        $appointment = $this->appointment($customer, $device, 'Confirmed');
+
+        $this->actingAs($staff)->from('/repair')->patch('/repair/appointments/'.$appointment->appointment_id, ['status' => 'Completed'])
+            ->assertSessionHasErrors(['status' => 'This appointment cannot be completed before its scheduled date.']);
+        $this->assertDatabaseHas('appointments', ['appointment_id' => $appointment->appointment_id, 'status' => 'Confirmed']);
+        $this->get('/repair')->assertOk()->assertSee('Create repair record')->assertSee('disabled', false);
+
+        RepairRecord::create(['appointment_id' => $appointment->appointment_id, 'device_id' => $device->device_id, 'diagnosis' => 'Screen repair', 'repair_status' => 'Pending', 'cost_estimate' => 250]);
+        $this->get('/repair')->assertOk()->assertDontSee('Create repair record');
+    }
+
+    public function test_customer_cannot_create_more_than_configured_pending_appointments(): void
+    {
+        [, $customer, $device] = $this->makeUser('customer', 'pending-limit@example.test');
+        foreach (range(1, config('shop.max_active_pending_appointments')) as $index) {
+            $this->appointment($customer, $device, 'Pending', 'Request '.$index);
+        }
+
+        $this->actingAs($customer->user)->from('/repair')->post('/repair/appointments', [
+            'device_id' => $device->device_id,
+            'preferred_date' => today()->addDays(2)->toDateString(),
+            'preferred_start_time' => '13:00',
+            'preferred_end_time' => '14:00',
+            'concern' => 'Another request',
+        ])->assertSessionHasErrors(['device_id' => 'You can have up to 3 active pending appointments at a time.']);
+        $this->assertDatabaseCount('appointments', config('shop.max_active_pending_appointments'));
     }
 }

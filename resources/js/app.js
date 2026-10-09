@@ -8,3 +8,4 @@
 
 import './echo';
 import './notifications';
+import './appointment-validation';
