@@ -9,6 +9,7 @@
         const menu = root.querySelector('[data-notification-menu]');
         const toggle = root.querySelector('[data-notification-toggle]');
         const markAll = root.querySelector('[data-mark-all-read]');
+        const testSound = root.querySelector('[data-test-notification-sound]');
         const toasts = root.querySelector('[data-notification-toasts]');
         const knownIds = new Set();
         let unreadCount = 0;
@@ -22,7 +23,7 @@
             if (!AudioContextClass) return;
 
             audioContext ??= new AudioContextClass();
-            if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+            return audioContext.state === 'suspended' ? audioContext.resume().catch(() => {}) : Promise.resolve();
         };
 
         const playNotificationSound = () => {
@@ -49,6 +50,10 @@
 
         document.addEventListener('pointerdown', unlockNotificationSound, { once: true });
         document.addEventListener('keydown', unlockNotificationSound, { once: true });
+
+        testSound?.addEventListener('click', () => {
+            Promise.resolve(unlockNotificationSound()).then(playNotificationSound).catch(() => {});
+        });
 
         const setCount = count => {
             unreadCount = Math.max(0, Number(count) || 0);

@@ -12,7 +12,10 @@
     <div class="dropdown-menu dropdown-menu-end p-0 shadow" data-notification-menu style="width:min(23rem, calc(100vw - 2rem)); max-height:27rem; overflow-y:auto">
         <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom">
             <strong>Notifications</strong>
-            <button class="btn btn-link btn-sm p-0 text-decoration-none" type="button" data-mark-all-read>Mark all as read</button>
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-link btn-sm p-0 text-decoration-none" type="button" data-test-notification-sound>Test sound</button>
+                <button class="btn btn-link btn-sm p-0 text-decoration-none" type="button" data-mark-all-read>Mark all as read</button>
+            </div>
         </div>
         <ul class="list-group list-group-flush" data-notification-list>
             <li class="list-group-item small text-secondary text-center py-3" data-notification-empty>Loading notifications…</li>
