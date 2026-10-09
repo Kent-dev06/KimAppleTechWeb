@@ -41,3 +41,26 @@ php artisan test
 ```
 
 The tests use an in-memory SQLite database. The configured Laragon application database uses MySQL.
+
+## Live repair notifications
+
+The repair portal stores notifications in the database and broadcasts them privately with Laravel Reverb. If Reverb is unavailable, the bell polls every 20 seconds.
+
+For a fresh Laragon setup, copy the `REVERB_*` and `VITE_REVERB_*` values from `.env.example` into `.env` and set `BROADCAST_CONNECTION=reverb`. Keep `REVERB_HOST=127.0.0.1`, `REVERB_PORT=8080`, and `REVERB_SCHEME=http` for local development.
+
+Run the following from the project folder:
+
+```sh
+php artisan migrate
+npm install
+npm run build
+```
+
+Start the Laravel app and Reverb in separate terminals:
+
+```sh
+php artisan serve
+php artisan reverb:start
+```
+
+The authenticated private channel uses the user's `user_id`; users can only subscribe to their own notifications.

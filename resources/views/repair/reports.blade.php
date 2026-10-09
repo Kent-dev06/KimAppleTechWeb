@@ -3,14 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Repair reports | Kim Apple Tech</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/repair-ui.css') }}" rel="stylesheet">
+    @vite('resources/js/app.js')
 </head>
 <body class="repair-app">
 <nav class="navbar navbar-dark"><div class="container">
     <a class="navbar-brand" href="/repair">Kim Apple Tech <span class="opacity-75">&middot; Service reports</span></a>
-    <a class="btn btn-outline-light btn-sm" href="/repair">Dashboard</a>
+    <div class="d-flex gap-2"><x-notification-bell /><a class="btn btn-outline-light btn-sm" href="/repair">Dashboard</a></div>
 </div></nav>
 <main class="container py-4">
     <div class="mb-4"><span class="text-primary fw-bold text-uppercase small">Staff workspace</span><h1 class="h2 mt-1 mb-2">Service reports</h1><p class="text-secondary mb-0">Appointment dates and completed smartphone repairs for the selected period.</p></div>

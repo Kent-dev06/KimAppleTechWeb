@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\{Auth,Route};
 use App\Http\Controllers\RepairManagementController as Repair;
 use App\Http\Controllers\AdminRepairController as RepairAdmin;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\RepairNotificationController as RepairNotifications;
 
 Route::get('/health', function () {
     DB::select('select 1');
@@ -18,6 +19,10 @@ Route::post('/register',[Repair::class,'register']);
 Route::post('/logout',[Repair::class,'logout'])->middleware('auth');
 Route::middleware(['auth','active','no-auth-cache'])->prefix('repair')->group(function(){
  Route::get('/session-check',fn()=>response()->noContent())->name('repair.session-check');
+ Route::get('/notifications', [RepairNotifications::class, 'index'])->name('repair.notifications.index');
+ Route::get('/notifications/poll', [RepairNotifications::class, 'poll'])->name('repair.notifications.poll');
+ Route::post('/notifications/read-all', [RepairNotifications::class, 'markAllRead'])->name('repair.notifications.read-all');
+ Route::post('/notifications/{notification}/read', [RepairNotifications::class, 'markRead'])->name('repair.notifications.read');
  Route::get('/',[Repair::class,'dashboard'])->name('repair.home');
  Route::patch('/profile',[Repair::class,'profile']);
  Route::middleware('can:access-customer-tools')->group(function(){Route::post('/devices',[Repair::class,'device']);Route::post('/appointments',[Repair::class,'appointment']);});

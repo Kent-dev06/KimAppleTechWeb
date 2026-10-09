@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Appointment;
+use App\Models\RepairRecord;
+use App\Observers\AppointmentObserver;
+use App\Observers\RepairRecordObserver;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Appointment::observe(AppointmentObserver::class);
+        RepairRecord::observe(RepairRecordObserver::class);
+
         Paginator::useBootstrapFive();
         Gate::define('manage-repairs', fn (User $user) => in_array($user->role, ['clerk', 'admin'], true));
         Gate::define('access-customer-tools', fn (User $user) => in_array($user->role, ['customer', 'clerk', 'admin'], true));
