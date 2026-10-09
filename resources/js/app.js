@@ -9,3 +9,4 @@
 import './echo';
 import './notifications';
 import './appointment-validation';
+import './live-datetime';

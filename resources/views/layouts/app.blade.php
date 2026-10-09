@@ -90,9 +90,12 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-3 ml-auto">
-                    <div class="hidden sm:flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-xs font-bold text-slate-100">
+                    <div class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-xs font-bold text-slate-100" aria-label="Current date and time in the Philippines">
                         <i class="fas fa-clock text-amber-300"></i>
-                        <span id="liveClock" data-live-clock data-no-translate>Loading time...</span>
+                        <span class="flex flex-col leading-tight" data-no-translate>
+                            <span id="liveDate">Loading date...</span>
+                            <span id="liveClock" data-live-clock>Loading time...</span>
+                        </span>
                     </div>
                     <div class="flex bg-white/10 rounded-lg p-1">
                         <button type="button" data-lang-button="en" class="px-3 py-1 text-xs font-bold rounded-md">EN</button>
@@ -265,21 +268,33 @@
 
         function formatLiveClock() {
             const clock = document.getElementById('liveClock');
+            const date = document.getElementById('liveDate');
 
-            if (!clock) {
+            if (!clock && !date) {
                 return;
             }
 
-            clock.textContent = new Intl.DateTimeFormat('en-PH', {
+            const now = new Date();
+
+            if (date) {
+                date.textContent = new Intl.DateTimeFormat('en-PH', {
+                    timeZone: 'Asia/Manila',
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                }).format(now);
+            }
+
+            if (clock) {
+                clock.textContent = new Intl.DateTimeFormat('en-PH', {
                 timeZone: 'Asia/Manila',
-                month: 'short',
-                day: '2-digit',
-                year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: true,
-            }).format(new Date());
+                }).format(now);
+            }
         }
 
         function formatOrderAge() {

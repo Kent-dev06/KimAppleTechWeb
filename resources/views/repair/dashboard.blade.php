@@ -12,7 +12,7 @@
 <body class="repair-app">
 <nav class="navbar navbar-dark bg-primary"><div class="container">
     <a class="navbar-brand" href="/repair">Kim Apple Tech · Smartphone Repair</a>
-    <div class="d-flex gap-2"><x-notification-bell />@if($canManageRepairs)<a class="btn btn-outline-light btn-sm" href="/repair/reports">Reports</a>@endif @can('manage-accounts')<a class="btn btn-outline-light btn-sm" href="{{ route('repair.admin.reports') }}">Analytics</a><a class="btn btn-outline-light btn-sm" href="{{ route('repair.admin') }}">Accounts</a>@endcan
+    <div class="d-flex flex-wrap align-items-center gap-2 ms-auto"><div class="text-end text-white small lh-sm me-1" aria-label="Current date and time in the Philippines"><div data-live-date>Loading date...</div><div class="opacity-75" data-live-time>Loading time...</div></div><x-notification-bell />@if($canManageRepairs)<a class="btn btn-outline-light btn-sm" href="/repair/reports">Reports</a>@endif @can('manage-accounts')<a class="btn btn-outline-light btn-sm" href="{{ route('repair.admin.reports') }}">Analytics</a><a class="btn btn-outline-light btn-sm" href="{{ route('repair.admin') }}">Accounts</a>@endcan
         <form method="post" action="/logout">@csrf<button class="btn btn-outline-light btn-sm">Sign out · {{ Auth::user()->name }}</button></form>
     </div>
 </div></nav>
