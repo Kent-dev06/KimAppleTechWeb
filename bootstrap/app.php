@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'active' => \App\Http\Middleware\EnsureActiveAccount::class,
             'no-auth-cache' => \App\Http\Middleware\PreventAuthenticatedPageCache::class,
         ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

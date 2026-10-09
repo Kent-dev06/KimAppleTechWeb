@@ -2,6 +2,12 @@
 use Illuminate\Support\Facades\{Auth,Route};
 use App\Http\Controllers\RepairManagementController as Repair;
 use App\Http\Controllers\AdminRepairController as RepairAdmin;
+use Illuminate\Support\Facades\DB;
+
+Route::get('/health', function () {
+    DB::select('select 1');
+    return response('ok');
+});
 
 Route::get('/',fn()=>redirect('/repair'));
 Route::get('/login',fn()=>Auth::check()?redirect('/repair'):view('repair.login'))->name('login');
