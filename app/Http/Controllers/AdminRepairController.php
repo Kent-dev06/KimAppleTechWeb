@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{ActivityLog, Appointment, Customer, Device, RepairRecord, User};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Gate, Hash};
+use Illuminate\Support\Str;
 
 class AdminRepairController extends Controller
 {
@@ -13,8 +14,8 @@ class AdminRepairController extends Controller
         Gate::authorize('manage-accounts');
         Gate::authorize('view-activity-log');
 
-        $accounts = User::whereIn('role', ['clerk', 'admin'])->orderBy('role')->orderBy('name')->get();
-        $activityLogs = ActivityLog::with('user')->latest('created_at')->limit(50)->get();
+        $accounts = User::whereIn('role', ['clerk', 'admin'])->orderBy('role')->orderBy('name')->paginate(15, ['*'], 'accounts_page')->withQueryString();
+        $activityLogs = ActivityLog::with('user')->latest('created_at')->paginate(15, ['*'], 'activity_page')->withQueryString();
 
         return view('repair.admin', compact('accounts', 'activityLogs'));
     }
@@ -29,6 +30,7 @@ class AdminRepairController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
+        $data['name'] = Str::title(trim($data['name']));
         $account = User::create(array_merge($data, ['password' => Hash::make($data['password']), 'is_active' => true]));
         $this->log('Account created: '.$account->role, $account);
 
@@ -55,12 +57,12 @@ class AdminRepairController extends Controller
         Gate::authorize('view-admin-reports');
         $request->validate(['from' => ['nullable', 'date'], 'to' => ['nullable', 'date', 'after_or_equal:from']]);
 
-        $completedRepairs = RepairRecord::with(['device', 'appointment.customer'])
-            ->where('repair_status', 'Completed')
-            ->whereHas('device', fn ($query) => $query->where('device_type', 'Smartphone'))
-            ->when($request->filled('from'), fn ($query) => $query->whereDate('date_completed', '>=', $request->input('from')))
-            ->when($request->filled('to'), fn ($query) => $query->whereDate('date_completed', '<=', $request->input('to')))
-            ->orderByDesc('date_completed')->get();
+        $counts = $this->filteredAppointments($request)
+            ->selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+        $statusNames = ['Pending', 'Confirmed', 'Rescheduled', 'Completed', 'Cancelled', 'No-show'];
+        $statusCounts = collect($statusNames)->mapWithKeys(fn ($status) => [$status => (int) $counts->get($status, 0)]);
 
         $repairsQuery = RepairRecord::where('repair_status', 'Completed')
             ->whereHas('device', fn ($query) => $query->where('device_type', 'Smartphone'))
@@ -71,9 +73,49 @@ class AdminRepairController extends Controller
             'customers' => Customer::whereHas('user', fn ($query) => $query->where('role', 'customer'))->count(),
             'completed_repairs' => $repairsQuery->count(),
             'revenue_estimate' => (float) (clone $repairsQuery)->sum('cost_estimate'),
+            'appointments' => $statusCounts->sum(),
         ];
 
-        return view('repair.admin-reports', compact('completedRepairs', 'stats'));
+        return view('repair.admin-reports', compact('statusCounts', 'stats'));
+    }
+
+    public function exportReports(Request $request)
+    {
+        Gate::authorize('view-admin-reports');
+        $request->validate(['from' => ['nullable', 'date'], 'to' => ['nullable', 'date', 'after_or_equal:from']]);
+
+        $appointments = $this->filteredAppointments($request)->orderBy('preferred_date')->cursor();
+
+        return response()->streamDownload(function () use ($appointments): void {
+            $output = fopen('php://output', 'w');
+            fputcsv($output, ['Appointment ID', 'Customer', 'Smartphone', 'Preferred date', 'Preferred start', 'Preferred end', 'Confirmed date', 'Confirmed start', 'Confirmed end', 'Status', 'Concern']);
+
+            foreach ($appointments as $appointment) {
+                fputcsv($output, [
+                    $appointment->appointment_id,
+                    trim($appointment->customer->first_name.' '.$appointment->customer->last_name),
+                    trim($appointment->device->brand.' '.$appointment->device->model),
+                    $appointment->preferred_date?->format('Y-m-d'),
+                    substr($appointment->preferred_start_time, 0, 5),
+                    substr($appointment->preferred_end_time, 0, 5),
+                    $appointment->confirmed_date?->format('Y-m-d'),
+                    $appointment->confirmed_start_time ? substr($appointment->confirmed_start_time, 0, 5) : '',
+                    $appointment->confirmed_end_time ? substr($appointment->confirmed_end_time, 0, 5) : '',
+                    $appointment->status,
+                    $appointment->concern,
+                ]);
+            }
+
+            fclose($output);
+        }, 'appointment-analytics.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    private function filteredAppointments(Request $request)
+    {
+        return Appointment::query()
+            ->whereHas('device', fn ($query) => $query->where('device_type', 'Smartphone'))
+            ->when($request->filled('from'), fn ($query) => $query->whereDate('preferred_date', '>=', $request->input('from')))
+            ->when($request->filled('to'), fn ($query) => $query->whereDate('preferred_date', '<=', $request->input('to')));
     }
 
     public function destroyRecord(string $type, int $id)

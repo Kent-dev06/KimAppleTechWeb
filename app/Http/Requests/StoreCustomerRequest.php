@@ -3,9 +3,18 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StoreCustomerRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'first_name' => Str::title(trim((string) $this->input('first_name'))),
+            'last_name' => Str::title(trim((string) $this->input('last_name'))),
+        ]);
+    }
+
     public function authorize(): bool
     {
         return !$this->user();

@@ -30,6 +30,7 @@ Route::middleware(['auth','active','no-auth-cache'])->prefix('repair')->group(fu
  Route::middleware('can:manage-repairs')->group(function(){Route::get('/reports',[Repair::class,'reports']);Route::post('/customers',[Repair::class,'walkin']);Route::patch('/customers/{customer}',[Repair::class,'updateCustomer']);Route::patch('/devices/{device}',[Repair::class,'updateDevice']);Route::patch('/appointments/{appointment}',[Repair::class,'schedule']);Route::post('/repairs',[Repair::class,'repair']);Route::patch('/repairs/{repair}',[Repair::class,'updateRepair']);});
  Route::prefix('admin')->group(function(){
   Route::middleware('can:manage-accounts')->group(function(){Route::get('/',[RepairAdmin::class,'index'])->name('repair.admin');Route::post('/accounts',[RepairAdmin::class,'storeAccount']);Route::patch('/accounts/{user}/toggle',[RepairAdmin::class,'toggleAccount']);});
+  Route::get('/reports/export',[RepairAdmin::class,'exportReports'])->middleware('can:view-admin-reports')->name('repair.admin.reports.export');
   Route::get('/reports',[RepairAdmin::class,'reports'])->middleware('can:view-admin-reports')->name('repair.admin.reports');
   Route::delete('/records/{type}/{id}',[RepairAdmin::class,'destroyRecord'])->whereIn('type',['user','customer','device','appointment','repair'])->middleware('can:hard-delete-records')->name('repair.admin.records.destroy');
  });
