@@ -35,6 +35,9 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 .repair-app .clerk-edit-details summary::-webkit-details-marker { display:none; }
 .repair-app .clerk-edit-details[open] { min-width:min(22rem,70vw); }
 .repair-app .clerk-walkin-card { scroll-margin-top:88px; background:linear-gradient(120deg,#fff,#f9fbff); }
+.repair-app .dashboard-section-icon { display:grid; flex:0 0 46px; width:46px; height:46px; place-items:center; color:#245fe0; border:1px solid #dce8ff; border-radius:15px; background:linear-gradient(145deg,#f2f6ff,#e4edff); }
+.repair-app .dashboard-section-icon svg { width:23px; height:23px; }
+.repair-app .dashboard-section-icon-repairs { color:#16805a; border-color:#d5f0e5; background:linear-gradient(145deg,#f1fbf6,#e0f5eb); }
 .repair-app .card { border:1px solid #dee7f3f2; border-radius:17px; box-shadow:0 8px 26px #1730530e; }
 .repair-app .card-body { padding:1.35rem; }
 .repair-app .dashboard-card-scroll { max-height:min(68vh,620px); overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }

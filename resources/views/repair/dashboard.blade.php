@@ -128,12 +128,12 @@
                 <label class="form-label" for="appointment_concern">Repair concern</label><textarea id="appointment_concern" class="form-control mb-2 @error('concern') is-invalid @enderror" name="concern" maxlength="255" placeholder="Describe the issue" required>{{ old('concern') }}</textarea>@error('concern')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror<button class="btn btn-primary">Submit appointment</button></form></div></div>
             </section>
         </div>
-        <div class="col-lg-8">
+        <div class="col-12">
             <div class="row g-3 align-items-start">
             <div class="col-md-6">
             <section class="card h-100" id="appointments-card">
                 <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                    <div><h2 class="h5 mb-1">Appointments</h2><span class="small text-secondary">{{ $appointments->total() }} {{ \Illuminate\Support\Str::plural('appointment', $appointments->total()) }}</span></div>
+                    <div class="d-flex align-items-center gap-3"><span class="dashboard-section-icon dashboard-section-icon-appointments" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18M8 14h3M8 17h7"></path></svg></span><div><h2 class="h5 mb-1">Appointments</h2><span class="small text-secondary">{{ $appointments->total() }} {{ \Illuminate\Support\Str::plural('appointment', $appointments->total()) }}</span></div></div>
                     <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#appointments-content" aria-expanded="{{ $errors->any() || request()->hasAny(['search','status','from','to']) ? 'true' : 'false' }}" aria-controls="appointments-content" data-collapse-toggle data-expanded-label="Hide appointments" data-collapsed-label="View appointments">{{ $errors->any() || request()->hasAny(['search','status','from','to']) ? 'Hide appointments' : 'View appointments' }}</button>
                 </div>
                 <div class="collapse @if($errors->any() || request()->hasAny(['search','status','from','to'])) show @endif" id="appointments-content"><div class="card-body dashboard-card-scroll">
@@ -175,7 +175,7 @@
             <div class="col-md-6">
             <section class="card h-100" id="repair-records-card">
                 <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                    <div><h2 class="h5 mb-1">{{ $canManageRepairs?'Repair records':'My repair history' }}</h2><span class="small text-secondary">{{ $repairs->total() }} {{ \Illuminate\Support\Str::plural('record', $repairs->total()) }}</span></div>
+                    <div class="d-flex align-items-center gap-3"><span class="dashboard-section-icon dashboard-section-icon-repairs" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H6a2 2 0 0 0-2 2v14h16V6a2 2 0 0 0-2-2h-2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M8 11h8M8 15h5"></path></svg></span><div><h2 class="h5 mb-1">{{ $canManageRepairs?'Repair records':'My repair history' }}</h2><span class="small text-secondary">{{ $repairs->total() }} {{ \Illuminate\Support\Str::plural('record', $repairs->total()) }}</span></div></div>
                     <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#repair-records-content" aria-expanded="{{ $errors->any() || request()->hasAny(['search','repair_status','from','to']) ? 'true' : 'false' }}" aria-controls="repair-records-content" data-collapse-toggle data-expanded-label="Hide records" data-collapsed-label="View records">{{ $errors->any() || request()->hasAny(['search','repair_status','from','to']) ? 'Hide records' : 'View records' }}</button>
                 </div>
                 <div class="collapse @if($errors->any() || request()->hasAny(['search','repair_status','from','to'])) show @endif" id="repair-records-content"><div class="card-body dashboard-card-scroll">
