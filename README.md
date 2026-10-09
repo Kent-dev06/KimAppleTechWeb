@@ -64,3 +64,15 @@ php artisan reverb:start
 ```
 
 The authenticated private channel uses the user's `user_id`; users can only subscribe to their own notifications.
+
+## Appointment rules and demo data
+
+Appointment hours and limits can be adjusted with `SHOP_OPENING_TIME`, `SHOP_CLOSING_TIME`, `SHOP_APPOINTMENT_MIN_DURATION_MINUTES`, `SHOP_APPOINTMENT_MAX_DURATION_MINUTES`, and `SHOP_MAX_ACTIVE_PENDING_APPOINTMENTS` in `.env`.
+
+The database seeder creates only reserved `.test` demo accounts. Set `DEMO_ADMIN_PASSWORD`, `DEMO_CLERK_PASSWORD`, and `DEMO_CUSTOMER_PASSWORD` (each at least 8 characters) before explicitly running `php artisan db:seed`. No demo data is seeded automatically on deployment. To remove only those reserved demo accounts and their linked records, run:
+
+```sh
+php artisan demo:reset --force
+```
+
+The reset command refuses to run without `--force` and is limited to the reserved demo accounts.
