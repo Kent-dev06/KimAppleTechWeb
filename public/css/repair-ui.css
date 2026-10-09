@@ -1,6 +1,6 @@
 :root { --repair-ink:#14243b; --repair-blue:#2463eb; --repair-border:#e3eaf4; }
 body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-gradient(ellipse at 8% 0%,#eaf1ff 0,transparent 30%),#f4f7fb; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
-.repair-app .navbar { min-height:68px; background:linear-gradient(105deg,#14243b,#20467c)!important; box-shadow:0 8px 24px #14243b26; }
+.repair-app .navbar { position:sticky; top:0; z-index:1030; min-height:68px; background:linear-gradient(105deg,#14243b,#20467c)!important; box-shadow:0 8px 24px #14243b26; }
 .repair-app .navbar .container { gap:1rem; }
 .repair-app .navbar-brand { font-weight:750; letter-spacing:-.02em; }
 .repair-app .navbar .btn-outline-light { border-color:#ffffff55; border-radius:10px; }
