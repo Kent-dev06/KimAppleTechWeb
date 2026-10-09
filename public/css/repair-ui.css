@@ -6,6 +6,35 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 .repair-app .navbar .btn-outline-light { border-color:#ffffff55; border-radius:10px; }
 .repair-app main.container { max-width:1240px; }
 .repair-app main>h1 { font-weight:760; letter-spacing:-.04em; margin:.5rem 0 1.25rem; }
+.repair-app .clerk-welcome { display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:clamp(1.5rem,3vw,2.5rem); overflow:hidden; color:white; border-radius:22px; background:radial-gradient(circle at 90% 15%,#6aa3ff66,transparent 30%),linear-gradient(115deg,#14243b,#245694); box-shadow:0 16px 36px #17305324; }
+.repair-app .clerk-welcome-kicker,.repair-app .clerk-section-kicker { display:block; margin-bottom:.55rem; font-size:.7rem; font-weight:800; letter-spacing:.13em; }
+.repair-app .clerk-welcome-kicker { color:#b9d5ff; }
+.repair-app .clerk-welcome h1 { margin:0 0 .55rem; color:white; font-size:clamp(1.6rem,3vw,2.35rem); font-weight:780; letter-spacing:-.045em; }
+.repair-app .clerk-welcome p { max-width:42rem; margin:0; color:#e3edff; }
+.repair-app .clerk-welcome-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.65rem; }
+.repair-app .clerk-welcome-actions .btn { min-height:44px; }
+.repair-app .clerk-welcome-actions .btn-outline-light { border-color:#ffffff80; }
+.repair-app .clerk-stats .card { transition:transform .18s ease,box-shadow .18s ease; }
+.repair-app .clerk-stats .card:hover { transform:translateY(-3px); box-shadow:0 14px 30px #17305318; }
+.repair-app .clerk-stat-card { min-height:130px; justify-content:center; }
+.repair-app .clerk-stat-card>span { color:#5b6d86; font-size:.9rem; }
+.repair-app .clerk-stat-card .fs-3 { margin-top:.25rem; font-size:2rem!important; }
+.repair-app .clerk-pipeline { background:linear-gradient(120deg,#fff,#f7faff); }
+.repair-app .clerk-stage-chip { display:inline-flex; align-items:center; gap:.55rem; padding:.45rem .7rem; color:#40536e; border:1px solid #e4ebf5; border-radius:999px; background:white; font-size:.82rem; }
+.repair-app .clerk-stage-chip strong { display:grid; min-width:1.45rem; height:1.45rem; place-items:center; color:#245fe0; border-radius:50%; background:#edf3ff; }
+.repair-app .clerk-section-kicker { color:#3972ce; }
+.repair-app .clerk-customer-directory { scroll-margin-top:88px; }
+.repair-app .clerk-search-form .input-group-text { color:#4774bd; border-color:var(--repair-border); border-radius:10px 0 0 10px; background:#f7faff; font-size:1.5rem; line-height:1; }
+.repair-app .clerk-search-form .form-control { min-width:0; }
+.repair-app .clerk-search-form .btn:last-child { border-radius:0 10px 10px 0; }
+.repair-app .clerk-customer-avatar { display:grid; flex:0 0 38px; width:38px; height:38px; place-items:center; color:#245fe0; border-radius:13px; background:#edf3ff; font-size:.78rem; font-weight:800; }
+.repair-app .clerk-contact-link { color:#355c95; text-decoration:none; }
+.repair-app .clerk-contact-link:hover { color:#1747a5; text-decoration:underline; }
+.repair-app .clerk-edit-details { min-width:7rem; }
+.repair-app .clerk-edit-details summary { display:inline-flex; align-items:center; list-style:none; cursor:pointer; }
+.repair-app .clerk-edit-details summary::-webkit-details-marker { display:none; }
+.repair-app .clerk-edit-details[open] { min-width:min(22rem,70vw); }
+.repair-app .clerk-walkin-card { scroll-margin-top:88px; background:linear-gradient(120deg,#fff,#f9fbff); }
 .repair-app .card { border:1px solid #dee7f3f2; border-radius:17px; box-shadow:0 8px 26px #1730530e; }
 .repair-app .card-body { padding:1.35rem; }
 .repair-app .dashboard-card-scroll { max-height:min(68vh,620px); overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
@@ -40,5 +69,7 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 .repair-login .form-control,.repair-login .btn-primary { min-height:48px; border-radius:11px; }
 .repair-login .btn-primary { font-weight:700; }
 .repair-empty-icon { display:grid; width:52px; height:52px; margin:0 auto .75rem; place-items:center; color:#4274ce; background:#edf3ff; border-radius:17px; font-size:1.45rem; }
+@media(max-width:767.98px) { .repair-app .clerk-welcome { align-items:flex-start; flex-direction:column; gap:1.25rem; } .repair-app .clerk-welcome-actions { justify-content:flex-start; } }
+@media(max-width:575.98px) { .repair-app .clerk-welcome-actions { display:grid; width:100%; grid-template-columns:1fr; } .repair-app .clerk-welcome-actions .btn { width:100%; } .repair-app .clerk-search-form .input-group-text { display:none; } .repair-app .clerk-customer-directory { padding:1rem; } }
 @media(max-width:575.98px) { .repair-app main.container { padding-left:1rem; padding-right:1rem; } .repair-app .card-body { padding:1.05rem; } .repair-app .nav-tabs { flex-wrap:nowrap; overflow-x:auto; } .repair-app .nav-tabs .nav-link { white-space:nowrap; padding:.68rem .8rem; font-size:.88rem; } .repair-app .navbar-brand { font-size:.95rem; } }
 @media(prefers-reduced-motion:reduce) { .repair-app *,.repair-login * { scroll-behavior:auto!important; transition:none!important; } }
