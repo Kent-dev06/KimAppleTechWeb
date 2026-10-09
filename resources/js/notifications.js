@@ -38,7 +38,7 @@
                 oscillator.type = 'sine';
                 oscillator.frequency.setValueAtTime(frequency, start);
                 volume.gain.setValueAtTime(0.0001, start);
-                volume.gain.exponentialRampToValueAtTime(0.12, start + 0.02);
+                volume.gain.exponentialRampToValueAtTime(0.24, start + 0.02);
                 volume.gain.exponentialRampToValueAtTime(0.0001, start + 0.2);
                 oscillator.connect(volume);
                 volume.connect(audioContext.destination);
