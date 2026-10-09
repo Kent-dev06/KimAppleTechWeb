@@ -32,5 +32,6 @@
         @forelse($activityLogs as $entry)<tr><td>{{ $entry->created_at->format('M d, Y H:i') }}</td><td>{{ $entry->user?->name ?? 'Deleted account' }}</td><td>{{ $entry->action }}</td><td>{{ $entry->model }}</td></tr>@empty<tr><td colspan="4" class="text-center text-secondary py-4">No activity has been recorded yet.</td></tr>@endforelse
     </tbody></table></div></section>
 </main>
+<script>window.addEventListener('pageshow', event => { if (event.persisted) window.location.reload(); });</script>
 </body>
 </html>
