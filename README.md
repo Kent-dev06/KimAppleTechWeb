@@ -67,7 +67,7 @@ The authenticated private channel uses the user's `user_id`; users can only subs
 
 ## Appointment rules and demo data
 
-Appointment hours and limits can be adjusted with `SHOP_OPENING_TIME`, `SHOP_CLOSING_TIME`, `SHOP_APPOINTMENT_MIN_DURATION_MINUTES`, `SHOP_APPOINTMENT_MAX_DURATION_MINUTES`, and `SHOP_MAX_ACTIVE_PENDING_APPOINTMENTS` in `.env`.
+Appointments are available Monday through Friday, 9:00 AM to 10:00 PM. Appointment length and pending request limits can be adjusted with `SHOP_APPOINTMENT_MIN_DURATION_MINUTES`, `SHOP_APPOINTMENT_MAX_DURATION_MINUTES`, and `SHOP_MAX_ACTIVE_PENDING_APPOINTMENTS` in `.env`.
 
 The database seeder creates only reserved `.test` demo accounts. Set `DEMO_ADMIN_PASSWORD`, `DEMO_CLERK_PASSWORD`, and `DEMO_CUSTOMER_PASSWORD` (each at least 8 characters) before explicitly running `php artisan db:seed`. No demo data is seeded automatically on deployment. To remove only those reserved demo accounts and their linked records, run:
 

@@ -3,6 +3,7 @@ namespace App\Http\Requests;
 use App\Models\{Appointment,Device};
 use App\Support\AppointmentTimeRules;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
@@ -21,7 +22,9 @@ class StoreAppointmentRequest extends FormRequest
             'preferred_date' => 'required|date|after_or_equal:today',
             'preferred_start_time' => ['required', 'date_format:H:i', 'after_or_equal:'.config('shop.opening_time')],
             'preferred_end_time' => ['required', 'date_format:H:i', 'after:preferred_start_time', 'before_or_equal:'.config('shop.closing_time')],
-            'concern' => 'required|string|max:255',
+            'concern_type' => ['nullable', 'string', Rule::in(['Cracked screen', 'Battery problem', 'Charging problem', 'Phone will not turn on', 'Water or liquid damage', 'Camera problem', 'Speaker or microphone problem', 'Software problem', 'Network or connectivity problem', 'Other'])],
+            'concern_other' => ['nullable', 'required_if:concern_type,Other', 'string', 'max:255'],
+            'concern' => ['nullable', 'required_without:concern_type', 'string', 'max:255'],
         ];
     }
 
@@ -32,12 +35,19 @@ class StoreAppointmentRequest extends FormRequest
             'preferred_start_time.after_or_equal' => 'Appointments can start from '.config('shop.opening_time').'.',
             'preferred_end_time.after' => 'The end time must be after the start time.',
             'preferred_end_time.before_or_equal' => 'Appointments must end by '.config('shop.closing_time').'.',
+            'concern_other.required_if' => 'Describe the specific issue.',
         ];
     }
 
     public function withValidator($validator): void
     {
         $validator->after(function ($validator): void {
+            $date = $this->input('preferred_date');
+
+            if (is_string($date) && ! $validator->errors()->has('preferred_date') && Carbon::parse($date)->isWeekend()) {
+                $validator->errors()->add('preferred_date', 'Appointments are available Monday to Friday only.');
+            }
+
             $start = $this->input('preferred_start_time');
             $end = $this->input('preferred_end_time');
 

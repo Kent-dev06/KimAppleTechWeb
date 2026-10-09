@@ -12,18 +12,18 @@ class AppointmentTimeRules
 
         $startMinutes = self::minutes($start);
         $endMinutes = self::minutes($end);
-        $opening = self::minutes(config('shop.opening_time', '08:00'));
-        $closing = self::minutes(config('shop.closing_time', '17:00'));
+        $opening = self::minutes(config('shop.opening_time', '09:00'));
+        $closing = self::minutes(config('shop.closing_time', '22:00'));
         $minimum = (int) config('shop.appointment_min_duration_minutes', 30);
         $maximum = (int) config('shop.appointment_max_duration_minutes', 120);
         $errors = [];
 
         if ($startMinutes < $opening || $startMinutes >= $closing) {
-            $errors['start'] = 'Choose a start time during shop hours ('.config('shop.opening_time', '08:00').'to'.config('shop.closing_time', '17:00').').';
+            $errors['start'] = 'Choose a start time during shop hours ('.config('shop.opening_time', '09:00').' to '.config('shop.closing_time', '22:00').').';
         }
 
         if ($endMinutes <= $opening || $endMinutes > $closing) {
-            $errors['end'] = 'Choose an end time during shop hours ('.config('shop.opening_time', '08:00').'to'.config('shop.closing_time', '17:00').').';
+            $errors['end'] = 'Choose an end time during shop hours ('.config('shop.opening_time', '09:00').' to '.config('shop.closing_time', '22:00').').';
         }
 
         if ($startMinutes % 30 !== 0) {
@@ -47,12 +47,12 @@ class AppointmentTimeRules
 
     public static function startLatest(): string
     {
-        return self::format(self::minutes(config('shop.closing_time', '17:00')) - (int) config('shop.appointment_min_duration_minutes', 30));
+        return self::format(self::minutes(config('shop.closing_time', '22:00')) - (int) config('shop.appointment_min_duration_minutes', 30));
     }
 
     public static function endEarliest(): string
     {
-        return self::format(self::minutes(config('shop.opening_time', '08:00')) + (int) config('shop.appointment_min_duration_minutes', 30));
+        return self::format(self::minutes(config('shop.opening_time', '09:00')) + (int) config('shop.appointment_min_duration_minutes', 30));
     }
 
     private static function minutes(string $time): int

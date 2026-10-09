@@ -6,14 +6,21 @@
         const status = form.dataset.statusField ? form.elements.namedItem(form.dataset.statusField) : null;
         const minDuration = Number(form.dataset.minDurationMinutes || 30);
         const maxDuration = Number(form.dataset.maxDurationMinutes || 120);
-        const openTime = form.dataset.openTime || '08:00';
-        const closeTime = form.dataset.closeTime || '17:00';
+        const openTime = form.dataset.openTime || '09:00';
+        const closeTime = form.dataset.closeTime || '22:00';
+        let rejectedWeekendDate = false;
 
         if (!start || !end) return;
 
         const minutes = value => {
             const [hours, mins] = value.split(':').map(Number);
             return (hours * 60) + mins;
+        };
+
+        const isWeekday = value => {
+            const [year, month, day] = value.split('-').map(Number);
+            const weekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+            return weekday >= 1 && weekday <= 5;
         };
 
         const setError = (input, message) => {
@@ -39,8 +46,15 @@
             const endValue = end.value;
 
             if (date && !date.value) {
-                setError(date, 'Choose a confirmed date.');
+                setError(date, rejectedWeekendDate ? 'Appointments are available Monday to Friday only.' : 'Choose a confirmed date.');
                 valid = false;
+            } else if (date?.value && !isWeekday(date.value)) {
+                setError(date, 'Appointments are available Monday to Friday only.');
+                rejectedWeekendDate = true;
+                date.value = '';
+                valid = false;
+            } else if (date?.value) {
+                rejectedWeekendDate = false;
             }
 
             if (!startValue) {
@@ -95,5 +109,24 @@
                 form.querySelector('.is-invalid')?.focus();
             }
         });
+    });
+
+    document.querySelectorAll('[data-issue-selector]').forEach(select => {
+        const details = select.form?.querySelector('[data-other-issue]');
+        const input = details?.querySelector('textarea');
+        if (!details || !input) return;
+
+        const updateOtherIssue = () => {
+            const isOther = select.value === 'Other';
+            details.hidden = !isOther;
+            input.required = isOther;
+            if (!isOther) {
+                input.value = '';
+                input.setCustomValidity('');
+            }
+        };
+
+        select.addEventListener('change', updateOtherIssue);
+        updateOtherIssue();
     });
 })();

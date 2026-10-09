@@ -3,6 +3,7 @@ namespace App\Http\Requests;
 use App\Models\Appointment;
 use App\Support\AppointmentTimeRules;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Gate;
 class ConfirmAppointmentRequest extends FormRequest
@@ -43,6 +44,13 @@ class ConfirmAppointmentRequest extends FormRequest
                 $validator->errors()->add('status', 'Only smartphone repair appointments can be managed here.');
 
                 return;
+            }
+
+            if (in_array($values['status'] ?? null, ['Confirmed', 'Rescheduled'], true)
+                && is_string($values['confirmed_date'] ?? null)
+                && ! $validator->errors()->has('confirmed_date')
+                && Carbon::parse($values['confirmed_date'])->isWeekend()) {
+                $validator->errors()->add('confirmed_date', 'Appointments are available Monday to Friday only.');
             }
 
             if (($values['status'] ?? null) === 'Completed') {
