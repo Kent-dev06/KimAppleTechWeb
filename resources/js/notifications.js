@@ -14,6 +14,41 @@
         let unreadCount = 0;
         let pollTimer = null;
         let subscribed = false;
+        let audioContext = null;
+
+        const unlockNotificationSound = () => {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+            if (!AudioContextClass) return;
+
+            audioContext ??= new AudioContextClass();
+            if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
+        };
+
+        const playNotificationSound = () => {
+            if (!audioContext || audioContext.state !== 'running') return;
+
+            const now = audioContext.currentTime;
+
+            [660, 880].forEach((frequency, index) => {
+                const start = now + index * 0.12;
+                const oscillator = audioContext.createOscillator();
+                const volume = audioContext.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(frequency, start);
+                volume.gain.setValueAtTime(0.0001, start);
+                volume.gain.exponentialRampToValueAtTime(0.12, start + 0.02);
+                volume.gain.exponentialRampToValueAtTime(0.0001, start + 0.2);
+                oscillator.connect(volume);
+                volume.connect(audioContext.destination);
+                oscillator.start(start);
+                oscillator.stop(start + 0.21);
+            });
+        };
+
+        document.addEventListener('pointerdown', unlockNotificationSound, { once: true });
+        document.addEventListener('keydown', unlockNotificationSound, { once: true });
 
         const setCount = count => {
             unreadCount = Math.max(0, Number(count) || 0);
@@ -23,6 +58,8 @@
         };
 
         const showToast = message => {
+            playNotificationSound();
+
             const toast = document.createElement('div');
             toast.className = 'toast show align-items-center text-bg-dark border-0 mb-2';
             toast.setAttribute('role', 'status');
