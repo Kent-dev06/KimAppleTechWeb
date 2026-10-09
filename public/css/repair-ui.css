@@ -8,6 +8,7 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 .repair-app main>h1 { font-weight:760; letter-spacing:-.04em; margin:.5rem 0 1.25rem; }
 .repair-app .card { border:1px solid #dee7f3f2; border-radius:17px; box-shadow:0 8px 26px #1730530e; }
 .repair-app .card-body { padding:1.35rem; }
+.repair-app .dashboard-card-scroll { max-height:min(68vh,620px); overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
 .repair-app .card h2 { color:#1b2d48; font-weight:720; letter-spacing:-.025em; }
 .repair-app .row>[class*="col"]>.card .fs-3 { color:var(--repair-blue); letter-spacing:-.04em; }
 .repair-app .form-label { color:#394b65; font-size:.88rem; font-weight:650; }
