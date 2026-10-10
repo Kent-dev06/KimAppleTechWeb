@@ -157,3 +157,102 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 @media(max-width:767.98px) { .modern-shell:not(.repair-app) aside { box-shadow:16px 0 38px #07182e50; } .repair-app .table-responsive { border-radius:9px; } }
 @media(max-width:575.98px) { .site-brand-logo { flex-basis:38px; width:38px; height:38px; } .repair-app .navbar-brand { font-size:.84rem; } .repair-login-logo { width:min(100%,220px); } }
 @media(prefers-reduced-motion:reduce) { .modern-shell * { scroll-behavior:auto!important; transition:none!important; } }
+
+/* Dashboard and page layout refinements. */
+.repair-app .navbar .container { max-width:1380px; min-height:70px; }
+.repair-app main.container { max-width:1360px; }
+.repair-app main.container>h1,.repair-app main.container>div.mb-4 h1 { margin-bottom:1.35rem!important; font-size:clamp(1.65rem,2.5vw,2.15rem); }
+.repair-app main.container>div.mb-4 { margin-bottom:1.65rem!important; }
+.repair-app main.container>div.mb-4>span:first-child,.repair-app main.container>div.mb-4>div:first-child { letter-spacing:.1em; }
+.repair-app .row.g-3.my-3>.col-sm-4>.card { position:relative; min-height:124px; justify-content:center; overflow:hidden; padding:1.25rem 1.4rem; border-left:4px solid #3478df; background:linear-gradient(130deg,#fff,#f7faff); }
+.repair-app .row.g-3.my-3>.col-sm-4:nth-child(2)>.card { border-left-color:#d9a326; }
+.repair-app .row.g-3.my-3>.col-sm-4:nth-child(3)>.card { border-left-color:#23a67a; }
+.repair-app .row.g-3.my-3>.col-sm-4>.card>span { font-size:.82rem; font-weight:650; }
+.repair-app .row.g-3.my-3>.col-sm-4>.card>.fs-3 { margin-top:.3rem; font-size:2.1rem!important; }
+.repair-app #customerTabs { display:flex; gap:.45rem; margin:1.25rem 0 1.1rem!important; padding:.45rem; overflow-x:auto; border:1px solid #dce6f2; border-radius:14px; background:#eaf1f9; }
+.repair-app #customerTabs .nav-item { flex:1 0 auto; }
+.repair-app #customerTabs .nav-link { width:100%; padding:.78rem 1.1rem; border-radius:10px; color:#526780; text-align:center; }
+.repair-app #customerTabs .nav-link.active { color:#174f9d; background:#fff; box-shadow:0 3px 12px #14385d14; }
+.repair-app .tab-pane>.card,.repair-app .tab-pane>section.card { margin-bottom:1rem; }
+.repair-app #customer-device-registration { border-top:3px solid #3d83df; }
+.repair-app #customer-device-registration .border-top { border-color:#e7edf5!important; }
+.repair-app #customer-device-registration .table-responsive { margin-top:.65rem; }
+.repair-app #create-appointment-card { border-top:3px solid #31b4c2; }
+.repair-app #registered-smartphones-card { border-top:3px solid #637fe0; }
+.repair-app #appointments-card { border-top:3px solid #3d83df; }
+.repair-app #repair-records-card { border-top:3px solid #22a77b; }
+.repair-app #completed-appointments-card { border-top:3px solid #25a879; }
+.repair-app #create-appointment-card .card-body form>label { margin-top:.35rem; }
+.repair-app #create-appointment-card textarea { min-height:95px; }
+.repair-app #appointments-content form.bg-light,.repair-app #repair-records-content form.bg-light { background:linear-gradient(120deg,#f4f8fd,#edf4fc)!important; border:1px solid #e1eaf4; border-radius:13px!important; }
+.repair-app .clerk-welcome { min-height:200px; align-items:center; padding:clamp(1.5rem,3vw,2.4rem); }
+.repair-app .clerk-welcome-actions .btn { border-radius:11px; box-shadow:0 6px 16px #081b3120; }
+.repair-app .clerk-welcome-actions .btn-light { color:#173d63; }
+.repair-app .clerk-welcome-actions .btn-outline-light:hover { color:#14375b; background:#fff; }
+.repair-app .clerk-stats { margin-bottom:1.5rem!important; }
+.repair-app .clerk-stats .card { min-height:115px; padding:1.2rem 1.35rem; border-top:3px solid #3d83df; background:linear-gradient(135deg,#fff,#f5f9ff); }
+.repair-app .clerk-stats .col:nth-child(2) .card { border-top-color:#e0ae36; }
+.repair-app .clerk-stats .col:nth-child(3) .card { border-top-color:#24a779; }
+.repair-app #customer-directory,.repair-app #walk-in-customer { scroll-margin-top:94px; }
+.repair-app #customer-directory .card-header,.repair-app #walk-in-customer .card-header { min-height:76px; }
+.repair-app #appointments-card .card-header,.repair-app #repair-records-card .card-header,.repair-app #registered-smartphones-card .card-header,.repair-app #completed-appointments-card .card-header { min-height:76px; }
+.repair-app #appointments-content .border.rounded-3.p-3 { border-color:#e0e9f3!important; background:linear-gradient(120deg,#f9fbfe,#f3f7fc); }
+.repair-app #appointments-content section[aria-label] { border-color:#e2eaf4!important; background:#fbfdff; box-shadow:inset 3px 0 #7ca4dc; }
+.repair-app #appointments-content section[aria-label]>h3 { font-size:.94rem; color:#294d76; }
+.repair-app .dashboard-section-icon { box-shadow:0 5px 12px #245fe013; }
+.repair-app .dashboard-card-scroll { max-height:min(72vh,680px); padding-right:.35rem; }
+.repair-app .table-responsive { scrollbar-color:#c6d5e7 transparent; scrollbar-width:thin; }
+.repair-app .table tbody td { color:#344963; }
+.repair-app .table tbody tr:hover td { background:#f7faff; }
+.repair-app .dropdown-menu { border:1px solid #dce6f2; border-radius:13px; box-shadow:0 14px 36px #10243d24!important; }
+.repair-app .dropdown-menu form { min-width:240px; }
+.repair-app .badge.text-bg-primary { color:#174b9a!important; background:#e3eeff!important; }
+.repair-app .badge.text-bg-success { color:#147451!important; background:#dcf6eb!important; }
+.repair-app .badge.text-bg-danger { color:#a93c48!important; background:#ffeaed!important; }
+.repair-app .badge.text-bg-secondary { color:#526177!important; background:#e9eef4!important; }
+.repair-app .modal-backdrop.show { opacity:.45; }
+.repair-app .modal-body { color:#44566f; }
+.repair-app .repair-login-card { max-width:1060px; }
+.repair-app .repair-login-brand { min-height:460px; }
+.repair-app .repair-login-form { max-width:660px; }
+.repair-app .register-shell { max-width:1160px; }
+.repair-app .register-card { box-shadow:0 26px 78px #14284820; }
+.repair-app .register-card .form-panel { background:linear-gradient(160deg,#fff,#fcfdff); }
+.repair-app .privacy-note { display:inline-flex; align-items:center; gap:.35rem; }
+.repair-app main article { border-color:#dce6f2!important; box-shadow:0 14px 40px #17365712!important; }
+.repair-app .toast { border:1px solid #dce6f2; border-radius:13px; box-shadow:0 14px 36px #10243d26; }
+@media(max-width:991.98px) {
+    .repair-app .clerk-welcome { align-items:flex-start; }
+    .repair-app .dashboard-card-scroll { max-height:64vh; }
+    .repair-app .repair-login-brand { min-height:400px; }
+}
+@media(max-width:767.98px) {
+    .repair-app .navbar .container { align-items:flex-start; padding-top:.65rem; padding-bottom:.65rem; }
+    .repair-app .navbar .container>.d-flex { justify-content:flex-end; }
+    .repair-app .navbar-brand { max-width:100%; white-space:normal; }
+    .repair-app .clerk-welcome { min-height:0; }
+    .repair-app .row.g-3.my-3>.col-sm-4>.card { min-height:100px; }
+    .repair-app #customerTabs .nav-link { padding:.68rem .8rem; font-size:.85rem; }
+    .repair-app .repair-login-brand { min-height:320px; }
+    .repair-app .repair-login-card { border-radius:20px; }
+}
+@media(max-width:575.98px) {
+    .repair-app main.container { padding-top:1rem!important; }
+    .repair-app main.container>div.mb-4 { margin-bottom:1.2rem!important; }
+    .repair-app .card-header { padding:.9rem 1rem; }
+    .repair-app .card-body { padding:1rem; }
+    .repair-app .clerk-welcome { padding:1.35rem; border-radius:18px; }
+    .repair-app .clerk-welcome h1 { font-size:1.55rem; }
+    .repair-app .row.g-3.my-3>.col-sm-4>.card { min-height:90px; padding:1rem; }
+    .repair-app .repair-login { padding:1rem .75rem; }
+    .repair-app .repair-login-brand { min-height:280px; padding:1.5rem; }
+    .repair-app .repair-login-form { padding:1.5rem; }
+    .repair-app .register-card .brand-panel { padding:1.35rem; }
+    .repair-app .register-card .form-panel { padding:1.4rem; }
+    .repair-app #appointments-content .table,.repair-app #repair-records-content .table { min-width:680px; }
+}
+@media print {
+    .repair-app { background:#fff!important; }
+    .repair-app .navbar,.repair-app .no-print,.repair-app .btn,.repair-app .notification-bell { display:none!important; }
+    .repair-app .card { box-shadow:none!important; break-inside:avoid; }
+}
