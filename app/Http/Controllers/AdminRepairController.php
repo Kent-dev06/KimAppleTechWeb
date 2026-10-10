@@ -65,7 +65,6 @@ class AdminRepairController extends Controller
         $statusCounts = collect($statusNames)->mapWithKeys(fn ($status) => [$status => (int) $counts->get($status, 0)]);
 
         $repairsQuery = RepairRecord::where('repair_status', 'Completed')
-            ->whereHas('device', fn ($query) => $query->where('device_type', 'Smartphone'))
             ->when($request->filled('from'), fn ($query) => $query->whereDate('date_completed', '>=', $request->input('from')))
             ->when($request->filled('to'), fn ($query) => $query->whereDate('date_completed', '<=', $request->input('to')));
 
@@ -88,13 +87,15 @@ class AdminRepairController extends Controller
 
         return response()->streamDownload(function () use ($appointments): void {
             $output = fopen('php://output', 'w');
-            fputcsv($output, ['Appointment ID', 'Customer', 'Smartphone', 'Preferred date', 'Preferred start', 'Preferred end', 'Confirmed date', 'Confirmed start', 'Confirmed end', 'Status', 'Concern']);
+            fputcsv($output, ['Appointment ID', 'Customer', 'Device type', 'Brand', 'Model', 'Preferred date', 'Preferred start', 'Preferred end', 'Confirmed date', 'Confirmed start', 'Confirmed end', 'Status', 'Concern']);
 
             foreach ($appointments as $appointment) {
                 fputcsv($output, [
                     $appointment->appointment_id,
                     trim($appointment->customer->first_name.' '.$appointment->customer->last_name),
-                    trim($appointment->device->brand.' '.$appointment->device->model),
+                    $appointment->device->device_type,
+                    $appointment->device->brand,
+                    $appointment->device->model,
                     $appointment->preferred_date?->format('Y-m-d'),
                     substr($appointment->preferred_start_time, 0, 5),
                     substr($appointment->preferred_end_time, 0, 5),
@@ -113,7 +114,6 @@ class AdminRepairController extends Controller
     private function filteredAppointments(Request $request)
     {
         return Appointment::query()
-            ->whereHas('device', fn ($query) => $query->where('device_type', 'Smartphone'))
             ->when($request->filled('from'), fn ($query) => $query->whereDate('preferred_date', '>=', $request->input('from')))
             ->when($request->filled('to'), fn ($query) => $query->whereDate('preferred_date', '<=', $request->input('to')));
     }

@@ -18,7 +18,7 @@ class StoreAppointmentRequest extends FormRequest
     {
         return [
             'customer_id' => [Gate::allows('manage-repairs') ? 'required' : 'nullable', 'exists:customers,customer_id'],
-            'device_id' => ['required', 'integer', Rule::exists('devices', 'device_id')->where('device_type', 'Smartphone')],
+            'device_id' => ['required', 'integer', Rule::exists('devices', 'device_id')],
             'preferred_date' => 'required|date|after_or_equal:today',
             'preferred_start_time' => ['required', 'date_format:H:i', 'after_or_equal:'.config('shop.opening_time')],
             'preferred_end_time' => ['required', 'date_format:H:i', 'after:preferred_start_time', 'before_or_equal:'.config('shop.closing_time')],
@@ -72,7 +72,7 @@ class StoreAppointmentRequest extends FormRequest
                 : $this->user()->customer?->customer_id;
 
             if (! $customerId || (int) $device->customer_id !== (int) $customerId) {
-                $validator->errors()->add('device_id', 'Choose a smartphone registered to the selected customer.');
+                $validator->errors()->add('device_id', 'Choose a device registered to the selected customer.');
 
                 return;
             }

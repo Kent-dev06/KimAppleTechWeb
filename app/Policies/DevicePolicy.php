@@ -8,11 +8,11 @@ class DevicePolicy
 {
     public function manage(User $user, Device $device): bool
     {
-        return $user->can('manage-repairs') && $device->device_type === 'Smartphone';
+        return $user->can('manage-repairs');
     }
 
     public function delete(User $user, Device $device): bool
     {
-        return $user->role === 'admin' && $device->device_type === 'Smartphone';
+        return $user->role === 'admin';
     }
 }

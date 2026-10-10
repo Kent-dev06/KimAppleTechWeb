@@ -40,12 +40,6 @@ class ConfirmAppointmentRequest extends FormRequest
             $values = $this->all();
             $appointment = $this->route('appointment');
 
-            if ($appointment->device->device_type !== 'Smartphone') {
-                $validator->errors()->add('status', 'Only smartphone repair appointments can be managed here.');
-
-                return;
-            }
-
             if (in_array($values['status'] ?? null, ['Confirmed', 'Rescheduled'], true)
                 && is_string($values['confirmed_date'] ?? null)
                 && ! $validator->errors()->has('confirmed_date')

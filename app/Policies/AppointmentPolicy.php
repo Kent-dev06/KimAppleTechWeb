@@ -9,8 +9,7 @@ class AppointmentPolicy
 {
     public function manage(User $user, Appointment $appointment): bool
     {
-        return $user->can('manage-repairs')
-            && $appointment->device?->device_type === 'Smartphone';
+        return $user->can('manage-repairs');
     }
 
     public function cancel(User $user, Appointment $appointment): Response
@@ -30,6 +29,6 @@ class AppointmentPolicy
 
     public function delete(User $user, Appointment $appointment): bool
     {
-        return $user->role === 'admin' && $appointment->device?->device_type === 'Smartphone';
+        return $user->role === 'admin';
     }
 }
