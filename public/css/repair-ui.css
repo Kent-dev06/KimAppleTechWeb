@@ -267,3 +267,7 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
     .repair-app [data-notification-menu]>.d-flex:first-child { align-items:flex-start!important; }
     .repair-app [data-notification-menu]>.d-flex:first-child>.d-flex { flex-basis:100%; justify-content:space-between; }
 }
+.repair-app [data-notification-menu]>.d-flex:first-child { display:grid!important; grid-template-columns:minmax(0,1fr); justify-content:stretch!important; }
+.repair-app [data-notification-menu]>.d-flex:first-child>strong { line-height:1.25; }
+.repair-app [data-notification-menu]>.d-flex:first-child>.d-flex { width:100%; justify-content:space-between; }
+.repair-app [data-notification-menu]>.d-flex:first-child button { margin:0; padding-right:0!important; padding-left:0!important; }
