@@ -20,7 +20,7 @@ class AppointmentPolicy
             return Response::deny('You may only cancel your own appointments.');
         }
 
-        if ($appointment->status !== 'Pending') {
+        if ($appointment->status !== 'Pending' || $appointment->repairRecord?->repair_status === 'Completed') {
             return Response::deny('Only pending appointments can be cancelled.');
         }
 
