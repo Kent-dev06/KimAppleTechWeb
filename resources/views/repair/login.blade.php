@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('images/kim-apple-tech-logo.png') }}">
     <meta name="theme-color" content="#14243b">
     <title>Sign in | Kim Apple Tech</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,7 +14,7 @@
     <section class="repair-login-card row g-0">
         <aside class="col-md-5 repair-login-brand d-flex flex-column justify-content-between">
             <div>
-                <div class="repair-login-mark mb-4" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="5.5" y="2.5" width="13" height="19" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M9 6h6M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m13.7 9.1-3.6 4h2.6l-.4 2.4 3.5-4.3h-2.5l.4-2.1Z" fill="currentColor"/></svg></div>
+                <img class="repair-login-logo mb-4" src="{{ asset('images/kim-apple-tech-logo.png') }}" alt="Kim Apple Tech logo">
                 <p class="small text-uppercase fw-bold text-info mb-2">Kim Apple Tech <span class="text-white-50">&middot; Davao City</span></p>
                 <h2 class="display-6 fw-bold">Your phone,<br>back in good hands.</h2>
                 <p class="text-white-50 mt-3 mb-0">Sign in to manage appointments and follow your smartphone repair.</p>

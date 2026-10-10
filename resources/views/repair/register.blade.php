@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('images/kim-apple-tech-logo.png') }}">
     <meta name="theme-color" content="#101d35">
     <title>Create your account | Kim Apple Tech</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -49,7 +50,7 @@
         <aside class="col-md-5 brand-panel">
             <div class="brand-content">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="brand-mark" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><rect x="5.5" y="2.5" width="13" height="19" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M9 6h6M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m13.7 9.1-3.6 4h2.6l-.4 2.4 3.5-4.3h-2.5l.4-2.1Z" fill="currentColor"/></svg></div>
+                    <img class="register-brand-logo" src="{{ asset('images/kim-apple-tech-logo.png') }}" alt="Kim Apple Tech logo">
                     <div><div class="brand-title">Kim Apple Tech</div><div class="brand-caption">Smartphone repair · Davao City</div></div>
                 </div>
                 <div class="visual-wrap" aria-hidden="true"><span class="spark one">✦</span><span class="spark two">✧</span><div class="phone"><div class="phone-screen"><span>Back to<br>connected.</span></div></div></div>

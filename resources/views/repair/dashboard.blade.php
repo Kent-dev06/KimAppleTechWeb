@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('images/kim-apple-tech-logo.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $canManageRepairs ? ($admin ? 'Admin dashboard' : 'Clerk dashboard') : 'My appointments' }} | Kim Apple Tech</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +12,7 @@
 </head>
 <body class="repair-app">
 <nav class="navbar navbar-dark bg-primary"><div class="container">
-    <a class="navbar-brand" href="/repair">Kim Apple Tech · Device Repair</a>
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/repair"><img class="site-brand-logo" src="{{ asset('images/kim-apple-tech-logo.png') }}" alt="Kim Apple Tech logo"> <span>Kim Apple Tech · Device Repair</span></a>
     <div class="d-flex flex-wrap align-items-center gap-2 ms-auto"><div class="text-end text-white small lh-sm me-1" aria-label="Current date and time in the Philippines"><div data-live-date>Loading date...</div><div class="opacity-75" data-live-time>Loading time...</div></div><x-notification-bell />@if($canManageRepairs)<a class="btn btn-outline-light btn-sm" href="/repair/reports">Reports</a>@endif @can('manage-accounts')<a class="btn btn-outline-light btn-sm" href="{{ route('repair.admin.reports') }}">Analytics</a><a class="btn btn-outline-light btn-sm" href="{{ route('repair.admin') }}">Accounts</a>@endcan
         <form method="post" action="/logout">@csrf<button class="btn btn-outline-light btn-sm">Sign out · {{ Auth::user()->name }}</button></form>
     </div>

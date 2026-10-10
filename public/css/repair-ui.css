@@ -123,6 +123,10 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 .repair-app .clerk-pipeline { border:1px solid #dce6f2; }
 .repair-app .clerk-stage-chip { box-shadow:0 3px 10px #1730530a; }
 .repair-app #create-appointment-card,.repair-app #customer-device-registration,.repair-app #appointment-form { scroll-margin-top:88px; }
+.site-brand-logo { display:block; flex:0 0 46px; width:46px; height:46px; padding:2px; object-fit:cover; border:1px solid #ffffffa8; border-radius:9px; background:#fff; }
+.repair-app .navbar-brand { font-size:.96rem; }
+.repair-login-logo { display:block; width:min(100%,270px); aspect-ratio:1; object-fit:contain; padding:8px; border:1px solid #ffffffb8; border-radius:18px; background:#fff; box-shadow:0 16px 38px #081b3150; }
+.register-brand-logo { display:block; flex:0 0 56px; width:56px; height:56px; padding:2px; object-fit:cover; border:1px solid #dce6f2; border-radius:12px; background:#fff; box-shadow:0 7px 20px #081b3125; }
 
 /* Tailwind based dashboards share the same palette and control styling. */
 .modern-shell:not(.repair-app) { min-height:100vh; color:#1a2f4b; background:radial-gradient(ellipse at 8% 0%,#e6efff 0,transparent 32%),radial-gradient(ellipse at 95% 8%,#e4f9fc 0,transparent 26%),#f3f7fc!important; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
@@ -151,4 +155,5 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
 .auth-shell .role-card:hover { transform:translateY(-1px); box-shadow:0 7px 18px #18345412; }
 .modern-shell:not(.repair-app)>header nav a { border:1px solid #dbe5f1; border-radius:999px; background:#ffffffd9; box-shadow:0 5px 16px #1736570c; }
 @media(max-width:767.98px) { .modern-shell:not(.repair-app) aside { box-shadow:16px 0 38px #07182e50; } .repair-app .table-responsive { border-radius:9px; } }
+@media(max-width:575.98px) { .site-brand-logo { flex-basis:38px; width:38px; height:38px; } .repair-app .navbar-brand { font-size:.84rem; } .repair-login-logo { width:min(100%,220px); } }
 @media(prefers-reduced-motion:reduce) { .modern-shell * { scroll-behavior:auto!important; transition:none!important; } }

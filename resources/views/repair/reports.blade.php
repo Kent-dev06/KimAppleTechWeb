@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('images/kim-apple-tech-logo.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Service reports | Kim Apple Tech</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +12,7 @@
 </head>
 <body class="repair-app">
 <nav class="navbar navbar-dark"><div class="container">
-    <a class="navbar-brand" href="/repair">Kim Apple Tech <span class="opacity-75">&middot; Service reports</span></a>
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/repair"><img class="site-brand-logo" src="{{ asset('images/kim-apple-tech-logo.png') }}" alt="Kim Apple Tech logo"> <span>Kim Apple Tech <span class="opacity-75">&middot; Service reports</span></span></a>
     <div class="d-flex gap-2"><x-notification-bell /><a class="btn btn-outline-light btn-sm" href="/repair">Dashboard</a></div>
 </div></nav>
 <main class="container py-4">
