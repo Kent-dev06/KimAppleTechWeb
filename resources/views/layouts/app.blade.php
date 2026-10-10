@@ -7,6 +7,7 @@
     <title> Krude Gas - @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('css/repair-ui.css') }}" rel="stylesheet">
     <style>
         [x-cloak] { display: none !important; }
         .soft-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
@@ -16,7 +17,7 @@
     </style>
 </head>
 
-<body class="bg-slate-100 font-sans antialiased text-slate-800">
+<body class="modern-shell bg-slate-100 font-sans antialiased text-slate-800">
     @php
         $activeSection = $active ?? 'admin';
         $navItems = [

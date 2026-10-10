@@ -6,6 +6,7 @@
     <title>Krude Gas - Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('css/repair-ui.css') }}" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -20,7 +21,7 @@
         }
     </style>
 </head>
-<body class="bg-[#1e3a5f] flex items-center justify-center min-h-screen p-3 sm:p-4">
+<body class="modern-shell auth-shell bg-[#1e3a5f] flex items-center justify-center min-h-screen p-3 sm:p-4">
 
     <div class="bg-white w-full max-w-5xl rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl flex overflow-hidden md:min-h-[600px] ring-1 ring-white/20">
         
