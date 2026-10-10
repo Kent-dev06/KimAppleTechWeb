@@ -20,8 +20,8 @@ class AppointmentPolicy
             return Response::deny('You may only cancel your own appointments.');
         }
 
-        if ($appointment->status !== 'Pending' || $appointment->repairRecord?->repair_status === 'Completed') {
-            return Response::deny('Only pending appointments can be cancelled.');
+        if ($appointment->status !== 'Pending' || $appointment->repairRecord()->exists()) {
+            return Response::deny('Only pending appointments without an active repair can be cancelled.');
         }
 
         return Response::allow();
