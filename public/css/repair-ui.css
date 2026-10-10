@@ -256,3 +256,14 @@ body.repair-app { min-height:100vh; color:var(--repair-ink); background:radial-g
     .repair-app .navbar,.repair-app .no-print,.repair-app .btn,.repair-app .notification-bell { display:none!important; }
     .repair-app .card { box-shadow:none!important; break-inside:avoid; }
 }
+.repair-app [data-notification-menu] { width:min(25rem,calc(100vw - 1.25rem))!important; max-width:calc(100vw - 1.25rem); overflow-x:hidden; }
+.repair-app [data-notification-menu]>.d-flex:first-child { align-items:center!important; flex-wrap:wrap; gap:.45rem .75rem; padding:.7rem .85rem!important; }
+.repair-app [data-notification-menu]>.d-flex:first-child>strong { flex:0 0 auto; }
+.repair-app [data-notification-menu]>.d-flex:first-child>.d-flex { flex:1 1 auto; min-width:0; justify-content:flex-end; flex-wrap:wrap; gap:.35rem .8rem!important; }
+.repair-app [data-notification-menu] [data-mark-all-read],.repair-app [data-notification-menu] [data-test-notification-sound] { white-space:nowrap; font-size:.82rem; }
+.repair-app [data-notification-menu] [data-notification-list] .list-group-item { padding:.8rem 1rem; overflow-wrap:anywhere; }
+.repair-app [data-notification-menu] [data-notification-list] .list-group-item small { display:block; margin-top:.2rem; color:#71839b!important; font-size:.82rem; }
+@media(max-width:420px) {
+    .repair-app [data-notification-menu]>.d-flex:first-child { align-items:flex-start!important; }
+    .repair-app [data-notification-menu]>.d-flex:first-child>.d-flex { flex-basis:100%; justify-content:space-between; }
+}
