@@ -35,11 +35,16 @@ class AppointmentTimeRules
         }
 
         $duration = $endMinutes - $startMinutes;
+        $maximumHours = intdiv($maximum, 60);
+        $maximumRemainder = $maximum % 60;
+        $maximumLabel = $maximumHours > 0
+            ? $maximumHours.' hour'.($maximumHours === 1 ? '' : 's').($maximumRemainder > 0 ? ' '.$maximumRemainder.' minutes' : '')
+            : $maximum.' minutes';
 
         if ($duration <= 0) {
             $errors['end'] = 'The end time must be after the start time.';
         } elseif ($duration < $minimum || $duration > $maximum) {
-            $errors['end'] = 'Appointments must be between '.$minimum.' minutes and '.($maximum / 60).' hours.';
+            $errors['end'] = 'Appointments must be between '.$minimum.' minutes and '.$maximumLabel.'.';
         }
 
         return $errors;
