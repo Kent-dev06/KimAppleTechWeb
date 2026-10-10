@@ -114,7 +114,23 @@
     document.querySelectorAll('[data-issue-selector]').forEach(select => {
         const details = select.form?.querySelector('[data-other-issue]');
         const input = details?.querySelector('textarea');
-        if (!details || !input) return;
+        const deviceSelect = select.form?.querySelector('[name="device_id"]');
+        if (!details || !input || !deviceSelect) return;
+
+        const issueLists = {
+            Smartphone: JSON.parse(select.dataset.smartphoneIssues || '[]'),
+            Computer: JSON.parse(select.dataset.computerIssues || '[]'),
+        };
+
+        const updateIssues = () => {
+            const selectedDevice = deviceSelect.selectedOptions[0];
+            const issues = issueLists[selectedDevice?.dataset.deviceType] || [];
+            const previousValue = select.value;
+            select.replaceChildren(new Option(issues.length ? 'Choose a common issue' : 'Choose your device first', ''));
+            issues.forEach(issue => select.add(new Option(issue, issue)));
+            select.value = issues.includes(previousValue) ? previousValue : '';
+            select.disabled = issues.length === 0;
+        };
 
         const updateOtherIssue = () => {
             const isOther = select.value === 'Other';
@@ -126,7 +142,12 @@
             }
         };
 
+        deviceSelect.addEventListener('change', () => {
+            updateIssues();
+            updateOtherIssue();
+        });
         select.addEventListener('change', updateOtherIssue);
+        updateIssues();
         updateOtherIssue();
     });
 })();

@@ -22,7 +22,7 @@ class StoreAppointmentRequest extends FormRequest
             'preferred_date' => 'required|date|after_or_equal:today',
             'preferred_start_time' => ['required', 'date_format:H:i', 'after_or_equal:'.config('shop.opening_time')],
             'preferred_end_time' => ['required', 'date_format:H:i', 'after:preferred_start_time', 'before_or_equal:'.config('shop.closing_time')],
-            'concern_type' => ['nullable', 'string', Rule::in(['Cracked screen', 'Battery problem', 'Charging problem', 'Phone will not turn on', 'Water or liquid damage', 'Camera problem', 'Speaker or microphone problem', 'Software problem', 'Network or connectivity problem', 'Other'])],
+            'concern_type' => ['nullable', 'string', Rule::in(['Cracked screen', 'Battery problem', 'Charging problem', 'Phone will not turn on', 'Water or liquid damage', 'Camera problem', 'Speaker or microphone problem', 'Software problem', 'Network or connectivity problem', 'Computer will not turn on', 'Slow performance', 'Blue screen or system crash', 'Battery or power problem', 'Broken screen', 'Keyboard or trackpad problem', 'Overheating or fan noise', 'Wi-Fi or connectivity problem', 'Virus or software problem', 'Storage or data recovery', 'Other'])],
             'concern_other' => ['nullable', 'required_if:concern_type,Other', 'string', 'max:255'],
             'concern' => ['nullable', 'required_without:concern_type', 'string', 'max:255'],
         ];
